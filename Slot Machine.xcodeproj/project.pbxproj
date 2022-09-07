@@ -24,6 +24,7 @@
 		6B80DEDD28C56157006073EE /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B80DEDC28C56157006073EE /* Modifiers.swift */; };
 		6B80DEDF28C56745006073EE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B80DEDE28C56745006073EE /* Extensions.swift */; };
 		6B80DEE128C645C4006073EE /* ReelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B80DEE028C645C4006073EE /* ReelView.swift */; };
+		6B8F63F628C943B30006A71A /* PlaySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8F63F528C943B30006A71A /* PlaySound.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		6B80DEDC28C56157006073EE /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		6B80DEDE28C56745006073EE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6B80DEE028C645C4006073EE /* ReelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelView.swift; sourceTree = "<group>"; };
+		6B8F63F528C943B30006A71A /* PlaySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 			children = (
 				6B80DEDC28C56157006073EE /* Modifiers.swift */,
 				6B80DEDE28C56745006073EE /* Extensions.swift */,
+				6B8F63F528C943B30006A71A /* PlaySound.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B80DEE128C645C4006073EE /* ReelView.swift in Sources */,
+				6B8F63F628C943B30006A71A /* PlaySound.swift in Sources */,
 				6B80DEDF28C56745006073EE /* Extensions.swift in Sources */,
 				6B80DEBB28C55557006073EE /* ContentView.swift in Sources */,
 				6B80DEDD28C56157006073EE /* Modifiers.swift in Sources */,

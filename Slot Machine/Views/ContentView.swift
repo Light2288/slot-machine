@@ -20,12 +20,14 @@ struct ContentView: View {
     @State private var highScore: Int = UserDefaults.standard.integer(forKey: "Highscore")
     @State private var playerCoins: Int = 100
     @State private var betAmount: Int = 10
+    @State private var animatingSymbol: Bool = false
+    @State private var animatingModal: Bool = false
     
     private var isActiveBet10: Bool {
-        betAmount == 10
+        return betAmount == 10
     }
     private var isActiveBet20: Bool {
-        betAmount == 20
+        return betAmount == 20
     }
     private var isGameOver: Bool {
         playerCoins <= 0
@@ -34,10 +36,12 @@ struct ContentView: View {
     // MARK: - Functions
     func setBetAmount(newBetAmount: Int) {
         betAmount = newBetAmount
+        playSound(sound: "casino-chips", type: "mp3")
     }
     
     func spinReels() {
         reels = reels.map { _ in Int.random(in: 0..<symbols.count) }
+        playSound(sound: "spin", type: "mp3")
     }
     
     func manageSpinOutcome() {
@@ -54,16 +58,24 @@ struct ContentView: View {
     }
     
     func updatePlayerCoins(spinOutcome: SpinOutcome) {
-        playerCoins += spinOutcome == .win ? betAmount : -betAmount
+        playerCoins += spinOutcome == .win ? betAmount*10 : -betAmount
     }
     
     func updateHighscore() {
+        if playerCoins > highScore {
+            playSound(sound: "high-score", type: "mp3")
+        } else {
+            playSound(sound: "win", type: "")
+        }
         highScore = max(highScore, playerCoins)
         UserDefaults.standard.set(highScore, forKey: "Highscore")
     }
     
     func restartGame() {
+        self.animatingModal = false
+        self.betAmount = 10
         playerCoins = 100
+        playSound(sound: "chimeup", type: "mp3")
     }
     
     func resetGame() {
@@ -113,6 +125,13 @@ struct ContentView: View {
                         Image(symbols[reels[1]])
                             .resizable()
                             .modifier(ImageModifier())
+                            .opacity(animatingSymbol ? 1 : 0)
+                            .offset(y: animatingSymbol ? 0 : -50)
+                            .animation(.easeOut(duration: Double.random(in: 0.5...0.7)), value: animatingSymbol)
+                            .onAppear {
+                                self.animatingSymbol.toggle()
+                                playSound(sound: "riseup", type: "mp3")
+                            }
                     }
                     
                     HStack(alignment: .center, spacing: 0) {
@@ -121,6 +140,11 @@ struct ContentView: View {
                             Image(symbols[reels[0]])
                                 .resizable()
                                 .modifier(ImageModifier())
+                                .opacity(animatingSymbol ? 1 : 0)
+                                .animation(.easeOut(duration: Double.random(in: 0.7...0.9)), value: animatingSymbol)
+                                .offset(y: animatingSymbol ? 0 : -50)
+
+                                
                         }
                         Spacer()
                         ZStack {
@@ -128,12 +152,21 @@ struct ContentView: View {
                             Image(symbols[reels[2]])
                                 .resizable()
                                 .modifier(ImageModifier())
+                                .opacity(animatingSymbol ? 1 : 0)
+                                .animation(.easeOut(duration: Double.random(in: 0.9...1.1)), value: animatingSymbol)
+                                .offset(y: animatingSymbol ? 0 : -50)
                         }
                     }
                     .frame(maxWidth: 500)
                     
                     Button {
+                        withAnimation {
+                            self.animatingSymbol = false
+                        }
                         spinReels()
+                        withAnimation {
+                            self.animatingSymbol = true
+                        }
                         manageSpinOutcome()
                     } label: {
                         Image("gfx-spin")
@@ -161,13 +194,17 @@ struct ContentView: View {
                         
                         Image("gfx-casino-chips")
                             .resizable()
+                            .offset(x: isActiveBet10 ? 0 : -20)
                             .opacity(isActiveBet10 ? 1 : 0)
                             .modifier(CasinoChipsModifier())
                     }
                     
+                    Spacer()
+                    
                     HStack(alignment: .center, spacing: 10) {
                         Image("gfx-casino-chips")
                             .resizable()
+                            .offset(x: isActiveBet20 ? 0 : 20)
                             .opacity(isActiveBet20 ? 1 : 0)
                             .modifier(CasinoChipsModifier())
                         
@@ -260,6 +297,14 @@ struct ContentView: View {
                     .background(.white)
                     .cornerRadius(20)
                     .shadow(color: Color("ColorTransparentBlack"), radius: 6, x: 0, y: 0)
+                    .opacity($animatingModal.wrappedValue ? 1 : 0)
+                    .offset(y: $animatingModal.wrappedValue ? 0 : -100)
+                    .animation(.spring(response: 0.6, dampingFraction: 1.0, blendDuration: 1.0), value: animatingModal)
+                    .onAppear {
+                        playSound(sound: "game-over", type: "mp3")
+                        self.animatingModal = true
+                    }
+                    
                 }
             }
         } // ZStack
