@@ -17,7 +17,7 @@ struct ContentView: View {
     
     @State private var reels: Array = [0, 1, 2]
     @State private var showingInfoView: Bool = false
-    @State private var highScore: Int = 0
+    @State private var highScore: Int = UserDefaults.standard.integer(forKey: "Highscore")
     @State private var playerCoins: Int = 100
     @State private var betAmount: Int = 10
     
@@ -59,10 +59,18 @@ struct ContentView: View {
     
     func updateHighscore() {
         highScore = max(highScore, playerCoins)
+        UserDefaults.standard.set(highScore, forKey: "Highscore")
+    }
+    
+    func restartGame() {
+        playerCoins = 100
     }
     
     func resetGame() {
+        UserDefaults.standard.set(0, forKey: "Highscore")
+        highScore = 0
         playerCoins = 100
+        betAmount = 10
     }
     
     // MARK: - Body
@@ -179,7 +187,7 @@ struct ContentView: View {
             } // VStack
             .overlay(
                 Button(action: {
-                    print("Reset the game")
+                    resetGame()
                 }, label: {
                     Image(systemName: "arrow.2.circlepath.circle")
                 })
@@ -228,7 +236,7 @@ struct ContentView: View {
                                 .layoutPriority(1)
                             
                             Button {
-                                resetGame()
+                                restartGame()
                             } label: {
                                 Text("New game".uppercased())
                                     .font(.system(.body, design: .rounded))
